@@ -1,6 +1,7 @@
 require 'setup'
 require 'database'
 
+# the main note window
 class Notes < Shoes
   WIDTH = 400
   HEIGHT = 300
@@ -13,6 +14,7 @@ class Notes < Shoes
   url '/edit/(\d+)', :edit
   url '/update/(\d+)', :update
 
+  # first note to be displayed.  Setup interface then display the first note.
   def index
     id = Note.find( :first ).id
 
@@ -24,7 +26,14 @@ class Notes < Shoes
 
     show id
   end
+  
+  #--
+  # TODO should change id to title since links will be handled by title not id
+  #++
 
+  # displays a new note
+  # Inputs:
+  # [id]  +Fixnum+ of the id of the note
   def show( id )
     note = Note.find id
     @id = id
@@ -39,6 +48,9 @@ class Notes < Shoes
     edit_key_event( id )
   end
 
+  # changes display window into an edit box for note editing
+  # Inputs:
+  # [id]  +Fixnum+ of the id of the note
   def edit( id )
     note = Note.find id
     @text_stack.clear do
@@ -51,6 +63,9 @@ class Notes < Shoes
     save_key_event id
   end
 
+  # performs the save operation when updating a note
+  # Inputs:
+  # [id]  +Fixnum+ of the id of the note
   def update( id )
     note = Note.find id
     note.body = @edit_box.text
@@ -60,6 +75,8 @@ class Notes < Shoes
   end
 
   # key handling events
+  # Inputs:
+  # [id]  +Fixnum+ of the id of the note
   def edit_key_event( id )
     keypress do |k|
       case k
@@ -69,6 +86,8 @@ class Notes < Shoes
     end
   end
 
+  # Inputs:
+  # [id]  +Fixnum+ of the id of the note
   def save_key_event( id )
     keypress do |k|
       case k

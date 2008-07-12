@@ -1,5 +1,3 @@
-require 'link_token'
-
 class Scanner
   SYMBOL = {
     '+' => :underscore,
