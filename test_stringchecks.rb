@@ -1,4 +1,5 @@
 require 'test/unit'
+
 require 'string_checks'
 
 class TestStringChecks < Test::Unit::TestCase # :nodoc:
@@ -12,7 +13,9 @@ class TestStringChecks < Test::Unit::TestCase # :nodoc:
       "9",
       "947123",
       "+",
-      " + "
+      " + ",
+      "_"
+      "_"
     ]
 
   def setup
@@ -29,8 +32,17 @@ class TestStringChecks < Test::Unit::TestCase # :nodoc:
   end
 
   def test_word
-    true_index = [4]
+    true_index = [4, 6, 7]
     test_helper true_index, :word?
+  end
+
+  def test_underscore
+    true_index = [8]
+    test_helper true_index, :underscore?
+  end
+
+  def test_italics
+    true_index = [10]
   end
 
   private

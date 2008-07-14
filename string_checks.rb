@@ -2,17 +2,31 @@
 module StringChecks
   # checks if the current +String+ is a whitespace
   def whitespace?
-    not /^\s+$/.match( self ).nil?
+    regex_helper( /^\s+$/ )
   end
 
   # checks if the current +String+ is a number
   def number?
-    not /^[0-9]+$/.match( self ).nil?
+    regex_helper( /^[0-9]+$/ )
   end
 
   # checks if the current +String+ is a word
   def word?
-    not /^[a-zA-Z]+$/.match( self ).nil?
+    regex_helper( /^\w+$/ )
+  end
+
+  # checks for underscore
+  def underscore?
+    regex_helper( /^\+$/ )
+  end
+
+  # checks for italics
+  def italics?
+  end
+
+  private
+  def regex_helper( regex )
+    not regex.match( self ).nil?
   end
 end
 

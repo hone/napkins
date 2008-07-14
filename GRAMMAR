@@ -1,0 +1,36 @@
+= Concrete Grammar for Napkins Markup
+== Context-Free Part
+Document = Title Instructions .
+Title = begin_line WordList end_line .
+Link = InstructionStart '"' WordList '":' word InstructionEnd .
+
+Underscore = "+" WordList "+" .
+Italics = "_" WordList "_" .
+Bold = "*" WordList "*" .
+Subscript = "~" WordList "~" .
+Superscript = "^" WordList "^" .
+
+H1 = "h1." Whitespaces WordList .
+H2 = "h2." Whitepsaces WordList .
+H3 = "h3." Whitespaces WordList .
+H4 = "h4." Whitespaces WordList .
+H5 = "h5." Whitespaces WordList .
+H6 = "h6." Whitespaces WordList .
+
+Instructions = Instruction { Instruction } .
+Instruction = Header | Modifier | Link
+Modifier = InstructionStart ( Underscore | Italics | Bold | Subscript | Superscript ) InstructionEnd
+Header = begin_line ( H1 | H2 | H3 | H4 | H5 | H6 ) end_line .
+InstructionStart = whitespace | begin_line
+InstructionEnd  = whitespace | end_line
+
+WordList = word { whitespace word } .
+Whitespaces = whitespace { whitespace } .
+== Regular Part
+begin_line = start of line...
+end_line = "\n" | "\r"
+whitespace = " " | "\t"
+word = letter {letter | digit | symbol} .
+symbol = "," | "." | "?" | ..
+letter = "a" | "b" | .. | "z" | "A" | "B" | .. | "Z" 
+digit = "0" | "1" | .. "9" .
