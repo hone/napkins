@@ -60,7 +60,7 @@ class Scanner
         if klass
           # start symbol
           if fragment.empty?
-            if klass == UnderlineToken
+            if klass != LinkAToken
               tokens.push klass.new( character, position )
               start_position = position + 1
               ''
