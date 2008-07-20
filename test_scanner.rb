@@ -85,7 +85,7 @@ class TestScanner < Test::Unit::TestCase
   def test_italics_words
     expected_tokens = [
       StartLineToken.new( 1 ),
-     construct_word_token( "Hello", 0 ),
+      construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
       ItalicsToken.new( "_", 6 ),
       construct_word_token( "World", 7 ),
@@ -95,6 +95,87 @@ class TestScanner < Test::Unit::TestCase
     ]
 
     test_helper "\nHello _World_!", expected_tokens
+  end
+
+  def test_bold
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      BoldToken.new( "*", 0 ),
+      construct_word_token( "bold", 1 ),
+      BoldToken.new( "*", 5 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\n*bold*", expected_tokens
+  end
+
+  def test_bold_words
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      construct_word_token( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5, 6 ),
+      BoldToken.new( "*", 6 ),
+      construct_word_token( "World", 7 ),
+      BoldToken.new( "*", 12 ),
+      construct_word_token( "!", 13 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\nHello *World*!", expected_tokens
+  end
+
+  def test_subscript
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      SubscriptToken.new( "~", 0 ),
+      construct_word_token( "subscript", 1 ),
+      SubscriptToken.new( "~", 10 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\n~subscript~", expected_tokens
+  end
+
+  def test_subscript_words
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      construct_word_token( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5, 6 ),
+      SubscriptToken.new( "~", 6 ),
+      construct_word_token( "World", 7 ),
+      SubscriptToken.new( "~", 12 ),
+      construct_word_token( "!", 13 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\nHello ~World~!", expected_tokens
+  end
+
+  def test_superscript
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      SuperscriptToken.new( "^", 0 ),
+      construct_word_token( "superscript", 1 ),
+      SuperscriptToken.new( "^", 12 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\n^superscript^", expected_tokens
+  end
+
+  def test_superscript_words
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      construct_word_token( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5, 6 ),
+      SuperscriptToken.new( "^", 6 ),
+      construct_word_token( "World", 7 ),
+      SuperscriptToken.new( "^", 12 ),
+      construct_word_token( "!", 13 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\nHello ^World^!", expected_tokens
   end
 
   private
