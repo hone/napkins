@@ -178,6 +178,19 @@ class TestScanner < Test::Unit::TestCase
     test_helper "\nHello ^World^!", expected_tokens
   end
 
+  def test_link
+    expected_tokens = [
+      StartLineToken.new( 1 ),
+      LinkAToken.new( '"', 0, 1 ),
+      construct_word_token( "link", 1 ),
+      LinkBToken.new( '":', 5, 7 ),
+      construct_word_token( "http://www.link.com", 7 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\n\"link\":http://www.link.com", expected_tokens
+  end
+
   private
   def construct_word_token( word, start_position )
     WordToken.new word, start_position, start_position + word.length

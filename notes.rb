@@ -36,7 +36,6 @@ class Notes < Shoes
   # [id]  +Fixnum+ of the id of the note
   def show( id )
     note = Note.find id
-    @id = id
 
     @text_stack.clear do
       para note.body

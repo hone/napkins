@@ -38,6 +38,7 @@ class Scanner
 
       # remove surrounding whitespace on a line since we don't display it.
       line.strip!
+      # need a whitespace character to know to end the last token
       line += "\n"
 	
       # check for headers
@@ -64,20 +65,24 @@ class Scanner
               tokens.push klass.new( character, position )
               start_position = position + 1
               ''
+            else
+              # need to build and see if it's a LinkA or LinkB token
+              character
             end
           # used to construct linkb
           else
-            klass2 = SYMBOL[fragment]
-            if klass2
             # end of WordToken
+            tokens.push WordToken.new( fragment, start_position, position )
+            start_position = position + 1
+            # check for LinkAToken, since it must be handled differently
+            if klass == LinkAToken
+              character
             else
-              tokens.push WordToken.new( fragment, start_position, position )
               tokens.push klass.new( character, position )
-              start_position = position + 1
               ''
             end
           end
-        # must be a word or whitepsace
+        # must be a word or whitepsace or link
         else
           # puts "#{fragment.empty?} #{character.whitespace?} |#{fragment}| |#{character}|"
           # check for additional whitespace characters
@@ -91,6 +96,20 @@ class Scanner
             tokens.push WhitespaceToken.new( ' ', position, position + 1 )
             start_position = position + 1
             ''
+          # check for LinkA/B Tokens
+          elsif fragment == '"'
+            # check for LinkBToken
+            if character == ":"
+              tokens.push LinkBToken.new( '":', start_position - 1, position + 1 )
+              start_position = position + 1
+              ''
+            # then is a stand alone ", so must be a LinkAToken
+            else
+              tokens.push LinkAToken.new( '"', start_position, position )
+              start_position = position
+
+              character
+            end
           # keep building WordToken
           else
             fragment + character
