@@ -1,6 +1,7 @@
 require 'tokens'
 require 'string_checks'
 
+# Produces an +Array+ of +Token+s based on the source
 class Scanner
   SYMBOL = {
     '+' => UnderlineToken,
@@ -24,6 +25,9 @@ class Scanner
     'h6. ' => :header6,
   }
 
+  # Scans the source +String+ and produces an +Array+ of +Token+s
+  # Inputs:
+  # [string] - source file represented as a +String+
   def self.scan( string )
     tokens = Array.new
 

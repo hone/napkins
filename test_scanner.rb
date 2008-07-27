@@ -2,7 +2,7 @@ require 'test/unit'
 
 require 'scanner'
 
-class TestScanner < Test::Unit::TestCase
+class TestScanner < Test::Unit::TestCase # :nodoc:
   def setup
   end
 
