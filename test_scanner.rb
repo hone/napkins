@@ -8,6 +8,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_single_word
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "hello", 0 ),
       EndLineToken.new( 1 )
@@ -18,6 +20,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -30,6 +34,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_multiple_spaces
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -45,6 +51,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_underline
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       UnderlineToken.new( "+", 0 ),
       construct_word_token( "underline", 1 ),
@@ -57,6 +65,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_underline_and_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -72,6 +82,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_italics
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       ItalicsToken.new( "_", 0 ),
       construct_word_token( "italics", 1 ),
@@ -84,6 +96,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_italics_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -99,6 +113,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_bold
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       BoldToken.new( "*", 0 ),
       construct_word_token( "bold", 1 ),
@@ -111,6 +127,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_bold_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -126,6 +144,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_subscript
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       SubscriptToken.new( "~", 0 ),
       construct_word_token( "subscript", 1 ),
@@ -138,6 +158,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_subscript_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -153,6 +175,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_superscript
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       SuperscriptToken.new( "^", 0 ),
       construct_word_token( "superscript", 1 ),
@@ -165,6 +189,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_superscript_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -180,6 +206,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_link
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       LinkAToken.new( '"', 0, 1 ),
       construct_word_token( "link", 1 ),
@@ -193,6 +221,8 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
 
   def test_link_words
     expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       construct_word_token( "Hello", 0 ),
       WhitespaceToken.new( " ", 5, 6 ),
@@ -208,6 +238,26 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
     ]
 
     test_helper "\nHello \"Rodwitt Lai\":http://www.helloworld.com !", expected_tokens
+  end
+
+  def test_first_line
+    expected_tokens = [
+      StartLineToken.new( 0 ),
+      construct_word_token( "link", 0 ),
+      WhitespaceToken.new( " ", 4, 5 ),
+      construct_word_token( "cool", 5 ),
+      WhitespaceToken.new( " ", 9, 10 ),
+      construct_word_token( "awesome", 10 ),
+      EndLineToken.new( 0 ),
+      StartLineToken.new( 1 ),
+      LinkAToken.new( '"', 0, 1 ),
+      construct_word_token( "link", 1 ),
+      LinkBToken.new( '":', 5, 7 ),
+      construct_word_token( "http://www.link.com", 7 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "link cool awesome\n\"link\":http://www.link.com", expected_tokens
   end
 
   private

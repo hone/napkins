@@ -15,7 +15,6 @@ class TestStringChecks < Test::Unit::TestCase # :nodoc:
       "+",
       " + ",
       "_"
-      "_"
     ]
 
   def setup
@@ -32,7 +31,7 @@ class TestStringChecks < Test::Unit::TestCase # :nodoc:
   end
 
   def test_word
-    true_index = [4, 6, 7]
+    true_index = [4, 6, 7, 10]
     test_helper true_index, :word?
   end
 

@@ -34,6 +34,25 @@ class Scanner
     lines = string.split( "\n" )
     first_line = lines.shift
 
+    # process first line for words and spaces
+    tokens.push StartLineToken.new( 0 )
+    word = ""
+    start_position = 0
+    first_line.split(//).each_with_index do |char, line_index|
+      # end of word
+      if /\s/.match char
+        tokens.push WordToken.new( word, start_position, line_index ) if not word.empty?
+        tokens.push WhitespaceToken.new( char, line_index, line_index + 1 )
+        start_position = line_index + 1
+        word = ""
+      # construct word
+      else
+        word += char
+      end
+    end
+    tokens.push WordToken.new( word, start_position, start_position + word.length ) if not word.empty?
+    tokens.push EndLineToken.new( 0 )
+
     lines.each_with_index do |line, line_index|
       position = 0 # holds the position on the line
       line_index += 1
