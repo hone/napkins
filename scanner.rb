@@ -50,6 +50,8 @@ class Scanner
         word += char
       end
     end
+
+    # construct remaining word left if it exists
     tokens.push WordToken.new( word, start_position, start_position + word.length ) if not word.empty?
     tokens.push EndLineToken.new( 0 )
 
