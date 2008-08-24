@@ -41,8 +41,8 @@ class Scanner
     first_line.split(//).each_with_index do |char, line_index|
       # end of word
       if /\s/.match char
-        tokens.push WordToken.new( word, start_position, line_index ) if not word.empty?
-        tokens.push WhitespaceToken.new( char, line_index, line_index + 1 )
+        tokens.push WordToken.new( word, start_position ) if not word.empty?
+        tokens.push WhitespaceToken.new( char, line_index )
         start_position = line_index + 1
         word = ""
       # construct word
@@ -52,7 +52,7 @@ class Scanner
     end
 
     # construct remaining word left if it exists
-    tokens.push WordToken.new( word, start_position, start_position + word.length ) if not word.empty?
+    tokens.push WordToken.new( word, start_position ) if not word.empty?
     tokens.push EndLineToken.new( 0 )
 
     lines.each_with_index do |line, line_index|
@@ -97,7 +97,7 @@ class Scanner
           # used to construct linkb
           else
             # end of WordToken
-            tokens.push WordToken.new( fragment, start_position, position )
+            tokens.push WordToken.new( fragment, start_position )
             start_position = position + 1
             # check for LinkAToken, since it must be handled differently
             if klass == LinkAToken
@@ -112,25 +112,25 @@ class Scanner
           # puts "#{fragment.empty?} #{character.whitespace?} |#{fragment}| |#{character}|"
           # check for additional whitespace characters
           if fragment.empty? and character.whitespace?
-            tokens.push WhitespaceToken.new( character, start_position, position + 1 )
+            tokens.push WhitespaceToken.new( character, start_position )
             start_position = position + 1
             ''
           # end of WordToken
           elsif character.whitespace?
-            tokens.push WordToken.new( fragment, start_position, position )
-            tokens.push WhitespaceToken.new( ' ', position, position + 1 )
+            tokens.push WordToken.new( fragment, start_position )
+            tokens.push WhitespaceToken.new( ' ', position )
             start_position = position + 1
             ''
           # check for LinkA/B Tokens
           elsif fragment == '"'
             # check for LinkBToken
             if character == ":"
-              tokens.push LinkBToken.new( '":', start_position - 1, position + 1 )
+              tokens.push LinkBToken.new( '":', start_position - 1 )
               start_position = position + 1
               ''
             # then is a stand alone ", so must be a LinkAToken
             else
-              tokens.push LinkAToken.new( '"', start_position, position )
+              tokens.push LinkAToken.new( '"', start_position )
               start_position = position
 
               character

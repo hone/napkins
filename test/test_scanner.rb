@@ -11,7 +11,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "hello", 0 ),
+      WordToken.new( "hello", 0 ),
       EndLineToken.new( 1 )
     ]
 
@@ -23,9 +23,9 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
-      construct_word_token( "World!", 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
+      WordToken.new( "World!", 6 ),
       EndLineToken.new( 1 )
     ]
 
@@ -37,12 +37,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
-      WhitespaceToken.new( " ", 6, 7 ),
-      WhitespaceToken.new( " ", 7, 8 ),
-      WhitespaceToken.new( " ", 8, 9 ),
-      construct_word_token( "World!", 9 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
+      WhitespaceToken.new( " ", 6 ),
+      WhitespaceToken.new( " ", 7 ),
+      WhitespaceToken.new( " ", 8 ),
+      WordToken.new( "World!", 9 ),
       EndLineToken.new( 1 )
     ]
 
@@ -55,7 +55,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       UnderlineToken.new( "+", 0 ),
-      construct_word_token( "underline", 1 ),
+      WordToken.new( "underline", 1 ),
       UnderlineToken.new( "+", 10 ),
       EndLineToken.new( 1 )
     ]
@@ -68,12 +68,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
       UnderlineToken.new( "+", 6 ),
-      construct_word_token( "World", 7 ),
+      WordToken.new( "World", 7 ),
       UnderlineToken.new( "+", 12 ),
-      WordToken.new( "!", 13, 14 ),
+      WordToken.new( "!", 13 ),
       EndLineToken.new( 1 )
     ]
 
@@ -86,7 +86,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       ItalicsToken.new( "_", 0 ),
-      construct_word_token( "italics", 1 ),
+      WordToken.new( "italics", 1 ),
       ItalicsToken.new( "_", 8 ),
       EndLineToken.new( 1 )
     ]
@@ -99,12 +99,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
       ItalicsToken.new( "_", 6 ),
-      construct_word_token( "World", 7 ),
+      WordToken.new( "World", 7 ),
       ItalicsToken.new( "_", 12 ),
-      construct_word_token( "!", 13 ),
+      WordToken.new( "!", 13 ),
       EndLineToken.new( 1 )
     ]
 
@@ -117,7 +117,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       BoldToken.new( "*", 0 ),
-      construct_word_token( "bold", 1 ),
+      WordToken.new( "bold", 1 ),
       BoldToken.new( "*", 5 ),
       EndLineToken.new( 1 )
     ]
@@ -130,12 +130,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
       BoldToken.new( "*", 6 ),
-      construct_word_token( "World", 7 ),
+      WordToken.new( "World", 7 ),
       BoldToken.new( "*", 12 ),
-      construct_word_token( "!", 13 ),
+      WordToken.new( "!", 13 ),
       EndLineToken.new( 1 )
     ]
 
@@ -148,7 +148,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       SubscriptToken.new( "~", 0 ),
-      construct_word_token( "subscript", 1 ),
+      WordToken.new( "subscript", 1 ),
       SubscriptToken.new( "~", 10 ),
       EndLineToken.new( 1 )
     ]
@@ -161,12 +161,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
       SubscriptToken.new( "~", 6 ),
-      construct_word_token( "World", 7 ),
+      WordToken.new( "World", 7 ),
       SubscriptToken.new( "~", 12 ),
-      construct_word_token( "!", 13 ),
+      WordToken.new( "!", 13 ),
       EndLineToken.new( 1 )
     ]
 
@@ -179,7 +179,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
       SuperscriptToken.new( "^", 0 ),
-      construct_word_token( "superscript", 1 ),
+      WordToken.new( "superscript", 1 ),
       SuperscriptToken.new( "^", 12 ),
       EndLineToken.new( 1 )
     ]
@@ -192,12 +192,12 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
       SuperscriptToken.new( "^", 6 ),
-      construct_word_token( "World", 7 ),
+      WordToken.new( "World", 7 ),
       SuperscriptToken.new( "^", 12 ),
-      construct_word_token( "!", 13 ),
+      WordToken.new( "!", 13 ),
       EndLineToken.new( 1 )
     ]
 
@@ -209,10 +209,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      LinkAToken.new( '"', 0, 1 ),
-      construct_word_token( "link", 1 ),
-      LinkBToken.new( '":', 5, 7 ),
-      construct_word_token( "http://www.link.com", 7 ),
+      LinkAToken.new( '"', 0 ),
+      WordToken.new( "link", 1 ),
+      LinkBToken.new( '":', 5 ),
+      WordToken.new( "http://www.link.com", 7 ),
       EndLineToken.new( 1 )
     ]
 
@@ -224,16 +224,16 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      construct_word_token( "Hello", 0 ),
-      WhitespaceToken.new( " ", 5, 6 ),
-      LinkAToken.new( '"', 6, 7 ),
-      construct_word_token( "Rodwitt", 7 ),
-      WhitespaceToken.new( " ", 14, 15 ),
-      construct_word_token( "Lai", 15 ),
-      LinkBToken.new( '":', 18, 20 ),
-      construct_word_token( "http://www.helloworld.com", 20 ),
-      WhitespaceToken.new( " ", 45, 46 ),
-      construct_word_token( "!", 46 ),
+      WordToken.new( "Hello", 0 ),
+      WhitespaceToken.new( " ", 5 ),
+      LinkAToken.new( '"', 6 ),
+      WordToken.new( "Rodwitt", 7 ),
+      WhitespaceToken.new( " ", 14 ),
+      WordToken.new( "Lai", 15 ),
+      LinkBToken.new( '":', 18 ),
+      WordToken.new( "http://www.helloworld.com", 20 ),
+      WhitespaceToken.new( " ", 45 ),
+      WordToken.new( "!", 46 ),
       EndLineToken.new( 1 )
     ]
 
@@ -243,17 +243,17 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
   def test_first_line
     expected_tokens = [
       StartLineToken.new( 0 ),
-      construct_word_token( "link", 0 ),
-      WhitespaceToken.new( " ", 4, 5 ),
-      construct_word_token( "cool", 5 ),
-      WhitespaceToken.new( " ", 9, 10 ),
-      construct_word_token( "awesome", 10 ),
+      WordToken.new( "link", 0 ),
+      WhitespaceToken.new( " ", 4 ),
+      WordToken.new( "cool", 5 ),
+      WhitespaceToken.new( " ", 9 ),
+      WordToken.new( "awesome", 10 ),
       EndLineToken.new( 0 ),
       StartLineToken.new( 1 ),
-      LinkAToken.new( '"', 0, 1 ),
-      construct_word_token( "link", 1 ),
-      LinkBToken.new( '":', 5, 7 ),
-      construct_word_token( "http://www.link.com", 7 ),
+      LinkAToken.new( '"', 0 ),
+      WordToken.new( "link", 1 ),
+      LinkBToken.new( '":', 5 ),
+      WordToken.new( "http://www.link.com", 7 ),
       EndLineToken.new( 1 )
     ]
 
@@ -261,10 +261,6 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
   end
 
   private
-  def construct_word_token( word, start_position )
-    WordToken.new word, start_position, start_position + word.length
-  end
-
   def test_helper( string, expected_tokens )
     tokens = Scanner.scan string
     assert_equal expected_tokens, tokens
