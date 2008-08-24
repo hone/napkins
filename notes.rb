@@ -1,5 +1,5 @@
-require 'setup'
-require 'database'
+require 'lib/setup'
+require 'lib/database'
 
 # the main note window
 class Notes < Shoes
