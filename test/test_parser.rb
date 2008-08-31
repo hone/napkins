@@ -7,11 +7,15 @@ class TestParser < Test::Unit::TestCase # :nodoc:
   def setup
   end
 
-  def test_first_line
+  def test_parse_simple_first_line
+  end
+
+  def test_parse_simple_line_hello_world
     text = <<TEXT
+
 Hello World!
 TEXT
-    root = RootNode.new
+    root_node = RootNode.new
     hello_text_node = TextNode.new( "Hello" )
     space_text_node = TextNode.new( " " )
     world_text_node = TextNode.new( "World!" )
@@ -20,14 +24,14 @@ TEXT
     hello_tag_node = TagNode.new( hello_text_node, space_text_node )
     world_tag_node = TagNode.new( world_text_node, newline_text_node )
     space_text_node.next_node = world_tag_node
-    root.next_node = hello_tag_node
+    root_node = RootNode.new( hello_text_node )
 
     tokens = Scanner.scan( text )
 
-    assert_equal root, Parser.parse( tokens )
+    assert_equal root_node, Parser.parse( tokens )
   end
 
-  def test_process_tokens_simple
+  def test_process_stack_simple_hello_world
     text_node = TextNode.new( "Hello World!" )
     bold_node = BoldNode.new( text_node )
     tokens = Scanner.scan( "\n*Hello World!*" )
@@ -37,8 +41,21 @@ TEXT
     tokens.shift # StartLine 0 Token
     tokens.shift # EndLine 0 Token
     tokens.shift # StartLine 1 Token
-    tokens.each {|token| puts token.inspect }
 
-    assert_equal bold_node, Parser.process_tokens( tokens )
+    assert_equal bold_node, Parser.process_stack( tokens )
+  end
+
+  # handles the case where there's a node on the stack before processing it
+  def test_process_stack_previous_text_node
+    text_node = TextNode.new( "Hi BobHello World!" )
+
+    stack = Scanner.scan( "\nHello World!" )
+    stack.pop # EndLine 1 Token
+    stack.shift # StartLine 0 Token
+    stack.shift # EndLine 0 Token
+    stack.shift # EndLine 1 Token
+    stack.unshift TextNode.new( "Hi Bob" ) # insert node onto top of the stack
+
+    assert_equal text_node, Parser.process_stack( stack )
   end
 end
