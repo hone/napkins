@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'activerecord'
 
-require 'database'
+require 'lib/database'
 
 # migration file.  Creates the SchemaVersion table, keeping track of which 
 # version of the migration we're on.

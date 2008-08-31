@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'activerecord'
 
-require 'database'
+require 'lib/database'
 
 # migration file.  Creates the Note table, handling all the basic note data 
 # storage.
