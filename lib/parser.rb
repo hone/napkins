@@ -69,6 +69,9 @@ class Parser
           if last_node.class == stack_item.class and stack_item.is_a? TextNode
             last_node.value = "#{stack_item.value}#{last_node.value}"
             last_node
+          else
+            stack_item.next_node = last_node
+            stack_item
           end
         else
           klass = stack_item.node_class

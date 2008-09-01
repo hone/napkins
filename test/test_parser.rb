@@ -36,11 +36,8 @@ TEXT
     bold_node = BoldNode.new( text_node )
     tokens = Scanner.scan( "\n*Hello World!*" )
     # get rid of start/end line tokens for simple testing
-    tokens.pop # EndLine 1 Token
+    clean_stack( tokens )
     tokens.pop # second BoldToken
-    tokens.shift # StartLine 0 Token
-    tokens.shift # EndLine 0 Token
-    tokens.shift # StartLine 1 Token
 
     assert_equal bold_node, Parser.process_stack( tokens )
   end
@@ -50,12 +47,32 @@ TEXT
     text_node = TextNode.new( "Hi BobHello World!" )
 
     stack = Scanner.scan( "\nHello World!" )
+    clean_stack( stack )
+    stack.unshift TextNode.new( "Hi Bob" ) # insert node onto top of the stack
+
+    assert_equal text_node, Parser.process_stack( stack )
+  end
+
+  def test_process_stack_previous_node
+    hi_annie_text_node = TextNode.new( "Hi Annie" )
+    hello_world_text_node = TextNode.new( "Hello World!" )
+    bold_node = BoldNode.new( hi_annie_text_node )
+    bold_node_result = BoldNode.new( hi_annie_text_node, hello_world_text_node )
+
+    stack = Scanner.scan( "\nHello World!" )
+    clean_stack( stack )
+    stack.unshift bold_node
+
+    assert_equal bold_node_result, Parser.process_stack( stack )
+  end
+
+  private
+  def clean_stack( stack )
     stack.pop # EndLine 1 Token
     stack.shift # StartLine 0 Token
     stack.shift # EndLine 0 Token
     stack.shift # EndLine 1 Token
-    stack.unshift TextNode.new( "Hi Bob" ) # insert node onto top of the stack
 
-    assert_equal text_node, Parser.process_stack( stack )
+    stack
   end
 end
