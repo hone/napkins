@@ -260,12 +260,19 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
     test_helper "link cool awesome\n\n\"link\":http://www.link.com", expected_tokens
   end
 
-#  def test_newline_token
-#    expected_tokens = [
-#    ]
-#
-#    test_helper "\n\nhello\nworld", expected_tokens
-#  end
+  def test_newline_token
+    expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
+      StartLineToken.new( 1 ),
+      WordToken.new( "hello", 0 ),
+      NewLineToken.new( 5 ),
+      WordToken.new( "world", 6 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_helper "\n\nhello\nworld", expected_tokens
+  end
 
   private
   def test_helper( string, expected_tokens )

@@ -118,7 +118,11 @@ class Scanner
           # end of WordToken
           elsif character.whitespace?
             tokens.push WordToken.new( fragment, start_position )
-            tokens.push WhitespaceToken.new( ' ', position )
+            if character == "\n"
+              tokens.push NewLineToken.new( position )
+            else
+              tokens.push WhitespaceToken.new( ' ', position )
+            end
             start_position = position + 1
             ''
           # check for LinkA/B Tokens

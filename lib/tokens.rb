@@ -178,3 +178,21 @@ end
 class StartLineToken
   include LineToken
 end
+
+# Token class representing a new line
+class NewLineToken
+  include Token
+  # constructor.  Value should now be newline character.
+  # Inputs:
+  # [position] - +Fixnum+ representing the line number in the source string
+  def initialize( position )
+    @value = "\n"
+    @start_position = position
+    @end_position = start_position + @value.length
+  end
+
+  # Returns appropriate Syntax Node class
+  def node_class
+    NewLineNode
+  end
+end

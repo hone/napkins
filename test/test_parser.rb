@@ -45,6 +45,16 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     assert_equal bold_node_result, Parser.process_stack( stack )
   end
 
+  def test_process_stack_newline
+    world_text_node = TextNode.new( "World" )
+    new_line_node = NewLineNode.new( world_text_node )
+    hello_text_node = TextNode.new( "Hello", new_line_node )
+    stack = Scanner.scan( "\n\nHello\nWorld" )
+    clean_stack( stack )
+
+    assert_equal hello_text_node, Parser.process_stack( stack )
+  end
+
   private
   def clean_stack( stack )
     stack.pop # EndLine 1 Token

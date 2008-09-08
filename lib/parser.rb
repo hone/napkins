@@ -74,6 +74,7 @@ class Parser
             stack_item.next_node = last_node
             stack_item
           end
+        # handle tokens
         else
           klass = stack_item.node_class
 
@@ -86,7 +87,12 @@ class Parser
               #unless last_node.nil?
               #  raise ParserException.new( "TextNode should not have a next Node @ #{token.start_position}, #{token.end_position}" )
               #end
-              klass.new( stack_item.value )
+              # if there's a last_node need to link the next node to this text_node
+              if last_node.nil?
+                klass.new( stack_item.value )
+              else
+                klass.new( stack_item.value, last_node )
+              end
             end
           else
             klass.new( last_node )

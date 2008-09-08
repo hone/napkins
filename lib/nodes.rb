@@ -1,8 +1,8 @@
-# represents a node in the Syntax Tree
+# represents a Node in the Syntax Tree
 class Node
   attr_accessor :value, :next_node
 
-  # constructor. sets up the value pointed to by the Node and the next node in the instruction
+  # constructor. sets up the value pointed to by the Node and the TextNode in the instruction
   def initialize( value, next_node = nil )
     @value = value
     @next_node = next_node
@@ -19,59 +19,59 @@ class Node
   end
 end
 
-# is a node in the Syntax Tree.  Contains all the text (words + spaces) to be processed.
+# is a Node in the Syntax Tree.  Contains all the text (words + spaces) to be processed.
 class TextNode < Node
 end
 
-# is a node in the Syntax Tree.  Denotes bold.
+# is a Node in the Syntax Tree.  Denotes bold.
 class BoldNode < Node
 end
 
-# is a node in the Syntax Tree.  Denotes italics.
+# is a Node in the Syntax Tree.  Denotes italics.
 class ItalicsNode < Node
 end
 
-# is a node in the Syntax Tree.  Denotes underline.
+# is a Node in the Syntax Tree.  Denotes underline.
 class UnderlineNode < Node
 end
 
-# is a node in the Syntax Tree.  Denotes subscript.
+# is a Node in the Syntax Tree.  Denotes subscript.
 class SubscriptNode < Node
 end
 
-# is a node in the Syntax Tree.  Denotes superscript.
+# is a Node in the Syntax Tree.  Denotes superscript.
 class SuperscriptNode < Node
 end
 
-# is a node in the Syntax Tree. Denotes header1.
+# is a Node in the Syntax Tree. Denotes header1.
 class Header1Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes header2.
+# is a Node in the Syntax Tree. Denotes header2.
 class Header2Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes header3.
+# is a Node in the Syntax Tree. Denotes header3.
 class Header3Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes header4.
+# is a Node in the Syntax Tree. Denotes header4.
 class Header4Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes header5.
+# is a Node in the Syntax Tree. Denotes header5.
 class Header5Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes header6.
+# is a Node in the Syntax Tree. Denotes header6.
 class Header6Node < Node
 end
 
-# is a node in the Syntax Tree. Denotes a link.
+# is a Node in the Syntax Tree. Denotes a link.
 class LinkNode < Node
 end
 
-# is a node in the Syntax Tree. Parent Node of the whole tree.
+# is a Node in the Syntax Tree. Parent Node of the whole tree.
 class RootNode < Node
   # constructor. The RootNode contains no value.
   # Inputs:
@@ -82,6 +82,17 @@ class RootNode < Node
   end
 end
 
-# is a node in the Syntax Tree.  Represents a tag.
+# is a Node in the Syntax Tree.  Represents a tag.
 class TagNode < Node
+end
+
+# is a Node in the Syntax Tree.  Represents a NewLine.  This is a special kind of TextNode
+class NewLineNode < Node
+  # constructor. The NewLineNode contains a "\n" value.
+  # Inputs:
+  # [next_node] - Next Node in the tree
+  def initialize( next_node = nil )
+    @value = "\n"
+    @next_node = next_node
+  end
 end
