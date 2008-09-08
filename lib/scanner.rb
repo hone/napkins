@@ -31,7 +31,7 @@ class Scanner
   def self.scan( string )
     tokens = Array.new
 
-    lines = string.split( "\n" )
+    lines = string.split( /\n\n/ )
     first_line = lines.shift
 
     # process first line for words and spaces

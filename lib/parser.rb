@@ -20,6 +20,7 @@ class Parser
         # parse rest of process_stack
         # put in a newline
         if token.is_a? EndLineToken
+          stack.push WhitespaceToken.new( "\n", -1 )
           node = process_stack( stack )
           stack.clear
           stack.push node
