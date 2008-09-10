@@ -6,6 +6,8 @@ class Parser
   class << self
     # parse the Token stream and create a Syntax Tree.
     def parse( tokens )
+      # indicates if processing the first line
+      first_line = false
       # add tokens to keep track of what's been processed
       stack = Array.new
       # keeps track of what token classes we have come across
@@ -20,11 +22,19 @@ class Parser
         # parse rest of process_stack
         # put in a newline
         if token.is_a? EndLineToken
-          stack.push WhitespaceToken.new( "\n", -1 )
-          node = process_stack( stack )
+          # handle first line differently (check for tags)
+          node =
+            if first_line
+              first_line = false
+              process_first_line( stack )
+            else
+              process_stack( stack )
+            end
           stack.clear
-          stack.push node
+          stack.push node if node
         elsif token.is_a? StartLineToken
+          # handle first line differently
+          first_line = true if token.start_position == 0
         # check for words
         elsif token.is_a? WordToken
           stack.push token
@@ -55,6 +65,19 @@ class Parser
 
       root_node.next_node = stack.first
       root_node
+    end
+
+    # process a stack of text tokens on the first line.  Expects an array of Tokens.  Returns a Node stream.
+    # Inputs:
+    # [tokens] - an Array of Tokens
+    def process_first_line( tokens )
+      tokens.reverse.inject( nil ) do |last_node, token|
+        if token.is_a? WhitespaceToken
+          last_node
+        else
+          TagNode.new( TextNode.new( token.value ), last_node )
+        end
+      end
     end
 
     # will process a stack of tokens and return the appropriate nodes. Expects Token class matching only on start token.  The second matched token is NOT on the tokens param.

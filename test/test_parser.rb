@@ -8,9 +8,23 @@ class TestParser < Test::Unit::TestCase # :nodoc:
   end
 
   def test_parse_simple_first_line
+    world_tag_node = TagNode.new( TextNode.new( "World" ) )
+    hello_tag_node = TagNode.new( TextNode.new( "Hello" ), world_tag_node )
+    root_node = RootNode.new( hello_tag_node )
+    tokens = Scanner.scan( "Hello World" )
+
+    assert_equal root_node, Parser.parse( tokens )
   end
 
-  def test_process_stack_simple_hello_world
+  def test_parse_simple_hello_world
+    hello_world_text_node = TextNode.new( "Hello World!" )
+    root_node = RootNode.new hello_world_text_node
+    tokens = Scanner.scan( "\n\nHello World!" )
+
+    assert_equal root_node, Parser.parse( tokens )
+  end
+
+  def test_process_stack_bold_hello_world
     text_node = TextNode.new( "Hello World!" )
     bold_node = BoldNode.new( text_node )
     tokens = Scanner.scan( "\n\n*Hello World!*" )
@@ -53,6 +67,17 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     clean_stack( stack )
 
     assert_equal hello_text_node, Parser.process_stack( stack )
+  end
+
+  def test_process_first_line_simple_hello_world
+    world_tag_node = TagNode.new( TextNode.new( "World!" ) )
+    hello_tag_node = TagNode.new( TextNode.new( "Hello" ), world_tag_node )
+    stack = Scanner.scan( "Hello World!" )
+    # clean the stack of the start/end line
+    stack.pop
+    stack.shift
+
+    assert_equal hello_tag_node, Parser.process_first_line( stack )
   end
 
   private

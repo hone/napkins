@@ -240,7 +240,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
     test_helper "\n\nHello \"Rodwitt Lai\":http://www.helloworld.com !", expected_tokens
   end
 
-  def test_first_line
+  def test_first_line_text
     expected_tokens = [
       StartLineToken.new( 0 ),
       WordToken.new( "link", 0 ),
@@ -258,6 +258,18 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
     ]
 
     test_helper "link cool awesome\n\n\"link\":http://www.link.com", expected_tokens
+  end
+
+  def test_first_line_with_bold_token
+    expected_tokens = [
+      StartLineToken.new( 0 ),
+      WordToken.new( "Hello+", 0 ),
+      WhitespaceToken.new( " ", 6 ),
+      WordToken.new( "World!+", 7 ),
+      EndLineToken.new( 0 )
+    ]
+
+    test_helper "Hello+ World!+", expected_tokens
   end
 
   def test_newline_token
