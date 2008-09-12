@@ -1,5 +1,5 @@
-require 'nodes'
-require 'scanner'
+require 'lib/nodes'
+require 'lib/scanner'
 
 # Parses the tokens from the Scanner
 class Parser

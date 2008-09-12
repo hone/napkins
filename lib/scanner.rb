@@ -1,5 +1,5 @@
-require 'tokens'
-require 'string_checks'
+require 'lib/tokens'
+require 'lib/string_checks'
 
 # Produces an +Array+ of +Token+s based on the source
 class Scanner
