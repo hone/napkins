@@ -26,11 +26,26 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     assert_equal root_node, Parser.parse( tokens )
   end
 
-  def test_parse_two_line
+  def test_parse_two_lines
     world_paragraph_node = ParagraphNode.new( TextNode.new( "world" ) )
     hello_paragraph_node = ParagraphNode.new( TagNode.new( TextNode.new( "hello" ) ), world_paragraph_node )
     root_node = RootNode.new( hello_paragraph_node )
     tokens = Scanner.scan( "hello\n\nworld" )
+
+    assert_equal root_node, Parser.parse( tokens )
+  end
+
+  def test_parse_three_lines
+    line3_paragraph_node = ParagraphNode.new( TextNode.new( "line3 line3" ) )
+    line2_paragraph_node = ParagraphNode.new( TextNode.new( "line2 line2" ), line3_paragraph_node )
+    line1_paragraph_node = ParagraphNode.new(
+      TagNode.new(
+        TextNode.new( "line1" ),
+        TagNode.new( TextNode.new( "line1" ) )
+      ), line2_paragraph_node
+    )
+    root_node = RootNode.new( line1_paragraph_node )
+    tokens = Scanner.scan( "line1 line1\n\nline2 line2\n\nline3 line3" )
 
     assert_equal root_node, Parser.parse( tokens )
   end
@@ -109,6 +124,31 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     stack.unshift hello_paragraph_node
 
     assert_equal result_node, Parser.process_stack( stack, true )
+  end
+
+  def test_process_stack_with_two_previous_paragraph_nodes
+    line3_paragraph_node_result = ParagraphNode.new( TextNode.new( "line3 line3" ) )
+    line2_paragraph_node_result = ParagraphNode.new( TextNode.new( "line2 line2" ), line3_paragraph_node_result )
+    line1_paragraph_node_result = ParagraphNode.new(
+      TagNode.new(
+        TextNode.new( "line1" ),
+        TagNode.new( TextNode.new( "line1" ) )
+      ), line2_paragraph_node_result
+    )
+
+    line2_paragraph_node = ParagraphNode.new( TextNode.new( "line2 line2" ) )
+    line1_paragraph_node = ParagraphNode.new(
+      TagNode.new(
+        TextNode.new( "line1" ),
+        TagNode.new( TextNode.new( "line1" ) )
+      ), line2_paragraph_node
+    )
+
+    stack = Scanner.scan( "\n\nline3 line3" )
+    clean_stack( stack )
+    stack.unshift line1_paragraph_node
+
+    assert_equal line1_paragraph_node_result, Parser.process_stack( stack, true )
   end
 
   private

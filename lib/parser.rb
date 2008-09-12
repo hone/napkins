@@ -99,9 +99,16 @@ class Parser
             last_node.value = "#{stack_item.value}#{last_node.value}"
             last_node
           else
+            # only make Paragraphs when ending lines
             last_node = ParagraphNode.new( last_node ) if endline and last_node
+            # need to attach at the end of the stack node (if ParagraphNode)
+            first_item = stack_item # need to keep this, to return beginning of node chain
+            while stack_item.next_node
+              stack_item = stack_item.next_node
+            end
             stack_item.next_node = last_node
-            stack_item
+
+            first_item
           end
         # handle tokens
         else
