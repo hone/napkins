@@ -10,7 +10,8 @@ class TestParser < Test::Unit::TestCase # :nodoc:
   def test_parse_simple_first_line
     world_tag_node = TagNode.new( TextNode.new( "World" ) )
     hello_tag_node = TagNode.new( TextNode.new( "Hello" ), world_tag_node )
-    root_node = RootNode.new( hello_tag_node )
+    paragraph_node = ParagraphNode.new( hello_tag_node )
+    root_node = RootNode.new( paragraph_node )
     tokens = Scanner.scan( "Hello World" )
 
     assert_equal root_node, Parser.parse( tokens )
@@ -18,10 +19,28 @@ class TestParser < Test::Unit::TestCase # :nodoc:
 
   def test_parse_simple_hello_world
     hello_world_text_node = TextNode.new( "Hello World!" )
-    root_node = RootNode.new hello_world_text_node
+    paragraph_node = ParagraphNode.new( hello_world_text_node )
+    root_node = RootNode.new( paragraph_node )
     tokens = Scanner.scan( "\n\nHello World!" )
 
     assert_equal root_node, Parser.parse( tokens )
+  end
+
+  def test_parse_two_line
+    world_paragraph_node = ParagraphNode.new( TextNode.new( "world" ) )
+    hello_paragraph_node = ParagraphNode.new( TagNode.new( TextNode.new( "hello" ) ), world_paragraph_node )
+    root_node = RootNode.new( hello_paragraph_node )
+    tokens = Scanner.scan( "hello\n\nworld" )
+
+    assert_equal root_node, Parser.parse( tokens )
+  end
+
+  def test_process_stack_simple_hello_world
+    paragraph_node = ParagraphNode.new( TextNode.new( "Hello World!" ) )
+    stack = Scanner.scan( "\n\nHello World!" )
+    clean_stack( stack )
+
+    assert_equal paragraph_node, Parser.process_stack( stack, true )
   end
 
   def test_process_stack_bold_hello_world
@@ -32,7 +51,7 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     clean_stack( tokens )
     tokens.pop # second BoldToken
 
-    assert_equal bold_node, Parser.process_stack( tokens )
+    assert_equal bold_node, Parser.process_stack( tokens, false )
   end
 
   # handles the case where there's a node on the stack before processing it
@@ -43,7 +62,7 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     clean_stack( stack )
     stack.unshift TextNode.new( "Hi Bob" ) # insert node onto top of the stack
 
-    assert_equal text_node, Parser.process_stack( stack )
+    assert_equal text_node, Parser.process_stack( stack, false )
   end
 
   def test_process_stack_previous_node
@@ -56,7 +75,7 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     clean_stack( stack )
     stack.unshift bold_node
 
-    assert_equal bold_node_result, Parser.process_stack( stack )
+    assert_equal bold_node_result, Parser.process_stack( stack, false )
   end
 
   def test_process_stack_newline
@@ -66,18 +85,30 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     stack = Scanner.scan( "\n\nHello\nWorld" )
     clean_stack( stack )
 
-    assert_equal hello_text_node, Parser.process_stack( stack )
+    assert_equal hello_text_node, Parser.process_stack( stack, false )
   end
 
   def test_process_first_line_simple_hello_world
     world_tag_node = TagNode.new( TextNode.new( "World!" ) )
     hello_tag_node = TagNode.new( TextNode.new( "Hello" ), world_tag_node )
+    paragraph_node = ParagraphNode.new( hello_tag_node )
     stack = Scanner.scan( "Hello World!" )
     # clean the stack of the start/end line
     stack.pop
     stack.shift
 
-    assert_equal hello_tag_node, Parser.process_first_line( stack )
+    assert_equal paragraph_node, Parser.process_first_line( stack )
+  end
+
+  def test_process_stack_previous_paragraph_node
+    world_paragraph_node = ParagraphNode.new( TextNode.new( "World!" ) )
+    result_node = ParagraphNode.new( TagNode.new( TextNode.new( "Hello" ) ), world_paragraph_node )
+    stack = Scanner.scan( "\n\nWorld!" )
+    clean_stack( stack )
+    hello_paragraph_node = ParagraphNode.new( TagNode.new( TextNode.new( "Hello" ) ) )
+    stack.unshift hello_paragraph_node
+
+    assert_equal result_node, Parser.process_stack( stack, true )
   end
 
   private

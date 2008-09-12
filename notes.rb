@@ -1,5 +1,8 @@
 require 'lib/setup'
 require 'lib/database'
+require 'lib/scanner'
+require 'lib/parser'
+require 'lib/walk_tree_shoes'
 
 # the main note window
 class Notes < Shoes
@@ -38,7 +41,12 @@ class Notes < Shoes
     note = Note.find id
 
     @text_stack.clear do
-      para note.body
+      tokens = Scanner.scan( note.body )
+      root_node = Parser.parse( tokens )
+      eval_string = WalkTreeShoes.walk_root( root_node )
+      puts eval_string
+      eval( eval_string )
+      #para note.body
     end
     @buttons_stack.clear do
       button( "edit" ) {edit id }
