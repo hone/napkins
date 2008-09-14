@@ -25,9 +25,13 @@ class WalkTreeShoes
         if current_node.is_a? TextNode
           components.push "\"#{current_node.value}\""
         elsif current_node.is_a? ParagraphNode
-          components.push "\npara( "
+          # only insert new lines for subsequent ParagraphNodes
+          components.push "\n" if last_node.is_a? ParagraphNode
+          components.push "para( "
         elsif current_node.is_a? BoldNode
           components.push "strong( "
+        elsif current_node.is_a? ItalicsNode
+          components.push "em( "
         end
 
         # check if we need to recursively check the values
@@ -35,16 +39,19 @@ class WalkTreeShoes
           walk( current_node.value, components )
           if not current_node.is_a? TextNode and not current_node.is_a? TagNode
             components.push " )"
-          elsif current_node.is_a? TagNode and last_node.is_a? TagNode
-            components.push '" "'
           end
         end
-
         components.push ", " unless current_node.is_a? ParagraphNode
+        # should only put spaces in between TagNodes
+        if current_node.is_a? TagNode and current_node.next_node.is_a? TagNode
+          components.push '" ", '
+        end
+
         last_node = current_node
         current_node = current_node.next_node
       end
 
+      # need to remove the last ", " since it should only be in between nodes
       components.pop unless last_node.is_a? ParagraphNode
     end
 
