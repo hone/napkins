@@ -43,4 +43,11 @@ class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
 
     assert_equal "para( em( \"italics\" ) )", WalkTreeShoes.walk_root( root_node )
   end
+
+  def test_walk_root_underscore
+    tokens = Scanner.scan( "\n\n+underscore+" )
+    root_node = Parser.parse( tokens )
+
+    assert_equal "para( ins( \"underscore\" ) )", WalkTreeShoes.walk_root( root_node )
+  end
 end

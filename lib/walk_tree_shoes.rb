@@ -32,6 +32,8 @@ class WalkTreeShoes
           components.push "strong( "
         elsif current_node.is_a? ItalicsNode
           components.push "em( "
+        elsif current_node.is_a? UnderlineNode
+          components.push "ins( "
         end
 
         # check if we need to recursively check the values
