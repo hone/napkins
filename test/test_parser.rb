@@ -50,6 +50,27 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     assert_equal root_node, Parser.parse( tokens )
   end
 
+  def test_parse_two_lines_with_bold
+    line2 = ParagraphNode.new(
+      BoldNode.new( TextNode.new( "bold1" ),
+        TextNode.new( " text ",
+          BoldNode.new( TextNode.new( "bold2" ) )
+        )
+      )
+    )
+    line1 = ParagraphNode.new(
+      TagNode.new(
+        TextNode.new( "tag1" ),
+        TagNode.new( TextNode.new( "tag2" ) )
+      ),
+      line2
+    )
+    root_node = RootNode.new( line1 )
+    tokens = Scanner.scan( "tag1 tag2\n\n*bold1* text *bold2*" )
+
+    assert_equal root_node, Parser.parse( tokens )
+  end
+
   def test_process_stack_simple_hello_world
     paragraph_node = ParagraphNode.new( TextNode.new( "Hello World!" ) )
     stack = Scanner.scan( "\n\nHello World!" )
@@ -149,6 +170,37 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     stack.unshift line1_paragraph_node
 
     assert_equal line1_paragraph_node_result, Parser.process_stack( stack, true )
+  end
+
+  def test_process_stack_previous_node_root_node_endline
+    result_node = RootNode.new( ParagraphNode.new( TextNode.new( "hello" ) ) )
+    stack = Scanner.scan( "\n\nhello" )
+    clean_stack( stack )
+    stack.unshift RootNode.new
+
+    assert_equal result_node, Parser.process_stack( stack, true )
+  end
+
+  def test_process_stack_bold_text_bold_nodes
+    root_node = RootNode.new(
+      ParagraphNode.new(
+        BoldNode.new(
+          TextNode.new( "bold1" ),
+          TextNode.new(
+            " text ",
+            BoldNode.new( TextNode.new( "bold2" ) )
+          )
+        )
+      )
+    )
+    stack = [
+      RootNode.new,
+      BoldNode.new( TextNode.new( "bold1" ) ),
+      TextNode.new( " text " ),
+      BoldNode.new( TextNode.new( "bold2" ) )
+    ]
+
+    assert_equal root_node, Parser.process_stack( stack, true )
   end
 
   private

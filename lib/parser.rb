@@ -9,7 +9,10 @@ class Parser
       # indicates if processing the first line
       first_line = false
       # add tokens to keep track of what's been processed
+      # on the current line
       stack = Array.new
+      # keeps track of the root chain
+      root_node = RootNode.new
       # keeps track of what token classes we have come across
       # key: Token class name
       # value: index in the token_stack
@@ -22,15 +25,15 @@ class Parser
         # put in a newline
         if token.is_a? EndLineToken
           # handle first line differently (check for tags)
-          node =
-            if first_line
-              first_line = false
-              process_first_line( stack )
-            else
-              process_stack( stack, true ) unless stack.empty?
-            end
+          if first_line
+            first_line = false
+            node = process_first_line( stack )
+            root_node.next_node = node
+          else
+            stack.unshift root_node
+            process_stack( stack, true ) unless stack.empty?
+          end
           stack.clear
-          stack.push node if node
         elsif token.is_a? StartLineToken
           # handle first line differently
           first_line = true if token.start_position == 0
@@ -56,13 +59,17 @@ class Parser
             else
               index = stack.rindex( tokens.first )
               # process from index to top of the stack
-              self.process_stack( stack[index..( stack.size - 1 )], false )
+              stack_to_process = stack[index..( stack.size - 1 )]
+              # remove the stack to process from original stack
+              1.upto( stack_to_process.size ) { stack.pop }
+              node = self.process_stack( stack_to_process, false )
+              stack.push node
             end
           end
         end
       end.compact
 
-      RootNode.new( stack.first )
+      root_node
     end
 
     # process a stack of text tokens on the first line.  Expects an array of Tokens.  Returns a Node stream.
@@ -100,7 +107,7 @@ class Parser
             last_node
           else
             # only make Paragraphs when ending lines
-            last_node = ParagraphNode.new( last_node ) if endline and last_node
+            last_node = ParagraphNode.new( last_node ) if endline and last_node and counter == tokens.size
             # need to attach at the end of the stack node (if ParagraphNode)
             first_item = stack_item # need to keep this, to return beginning of node chain
             while stack_item.next_node
