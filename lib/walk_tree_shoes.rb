@@ -18,6 +18,7 @@ class WalkTreeShoes
     # [node] - Node to walk down
     # [components] - components of tree walking to be joined later
     def walk( node, components )
+      last_node = nil
       current_node = node
 
       while current_node
@@ -25,20 +26,26 @@ class WalkTreeShoes
           components.push "\"#{current_node.value}\""
         elsif current_node.is_a? ParagraphNode
           components.push "\npara( "
+        elsif current_node.is_a? BoldNode
+          components.push "strong( "
         end
 
         # check if we need to recursively check the values
         if current_node.value.is_a? Node
           walk( current_node.value, components )
           if not current_node.is_a? TextNode and not current_node.is_a? TagNode
-            components.push " ) "
-          elsif current_node.is_a? TagNode
+            components.push " )"
+          elsif current_node.is_a? TagNode and last_node.is_a? TagNode
             components.push '" "'
           end
         end
 
+        components.push ", " unless current_node.is_a? ParagraphNode
+        last_node = current_node
         current_node = current_node.next_node
       end
+
+      components.pop unless last_node.is_a? ParagraphNode
     end
 
   end
