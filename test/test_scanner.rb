@@ -3,10 +3,7 @@ require 'test/unit'
 require 'scanner'
 
 class TestScanner < Test::Unit::TestCase # :nodoc:
-  def setup
-  end
-
-  def test_single_word
+  def test_scan_single_word
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -15,10 +12,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nhello", expected_tokens
+    test_scan_helper expected_tokens, "\n\nhello"
   end
 
-  def test_words
+  def test_scan_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -29,10 +26,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello World!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello World!"
   end
 
-  def test_multiple_spaces
+  def test_scan_multiple_spaces
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -46,10 +43,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello    World!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello    World!"
   end
 
-  def test_underline
+  def test_scan_underline
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -60,10 +57,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n+underline+", expected_tokens
+    test_scan_helper expected_tokens, "\n\n+underline+"
   end
 
-  def test_underline_and_words
+  def test_scan_underline_and_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -77,10 +74,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello +World+!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello +World+!"
   end
 
-  def test_italics
+  def test_scan_italics
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -91,10 +88,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n_italics_", expected_tokens
+    test_scan_helper expected_tokens, "\n\n_italics_"
   end
 
-  def test_italics_words
+  def test_scan_italics_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -108,10 +105,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello _World_!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello _World_!"
   end
 
-  def test_bold
+  def test_scan_bold
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -122,10 +119,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n*bold*", expected_tokens
+    test_scan_helper expected_tokens, "\n\n*bold*"
   end
 
-  def test_bold_words
+  def test_scan_bold_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -139,10 +136,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello *World*!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello *World*!"
   end
 
-  def test_subscript
+  def test_scan_subscript
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -153,10 +150,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n~subscript~", expected_tokens
+    test_scan_helper expected_tokens, "\n\n~subscript~"
   end
 
-  def test_subscript_words
+  def test_scan_subscript_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -170,10 +167,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello ~World~!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello ~World~!"
   end
 
-  def test_superscript
+  def test_scan_superscript
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -184,10 +181,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n^superscript^", expected_tokens
+    test_scan_helper expected_tokens, "\n\n^superscript^"
   end
 
-  def test_superscript_words
+  def test_scan_superscript_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -201,10 +198,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello ^World^!", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello ^World^!"
   end
 
-  def test_link
+  def test_scan_link
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -216,10 +213,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\n\"link\":http://www.link.com", expected_tokens
+    test_scan_helper expected_tokens, "\n\n\"link\":http://www.link.com"
   end
 
-  def test_link_words
+  def test_scan_link_words
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -237,10 +234,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nHello \"Rodwitt Lai\":http://www.helloworld.com !", expected_tokens
+    test_scan_helper expected_tokens, "\n\nHello \"Rodwitt Lai\":http://www.helloworld.com !"
   end
 
-  def test_first_line_text
+  def test_scan_first_line_text
     expected_tokens = [
       StartLineToken.new( 0 ),
       WordToken.new( "link", 0 ),
@@ -257,10 +254,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "link cool awesome\n\n\"link\":http://www.link.com", expected_tokens
+    test_scan_helper expected_tokens, "link cool awesome\n\n\"link\":http://www.link.com"
   end
 
-  def test_first_line_with_bold_token
+  def test_scan_first_line_with_bold_token
     expected_tokens = [
       StartLineToken.new( 0 ),
       WordToken.new( "Hello+", 0 ),
@@ -269,10 +266,10 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 0 )
     ]
 
-    test_helper "Hello+ World!+", expected_tokens
+    test_scan_helper expected_tokens, "Hello+ World!+"
   end
 
-  def test_newline_token
+  def test_scan_newline_token
     expected_tokens = [
       StartLineToken.new( 0 ),
       EndLineToken.new( 0 ),
@@ -283,11 +280,14 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
       EndLineToken.new( 1 )
     ]
 
-    test_helper "\n\nhello\nworld", expected_tokens
+    test_scan_helper expected_tokens, "\n\nhello\nworld"
+  end
+
+  def test_scan_empty_string
   end
 
   private
-  def test_helper( string, expected_tokens )
+  def test_scan_helper( expected_tokens, string )
     tokens = Scanner.scan string
     assert_equal expected_tokens, tokens
   end
