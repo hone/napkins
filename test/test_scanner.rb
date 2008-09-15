@@ -284,6 +284,7 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
   end
 
   def test_scan_empty_string
+    test_scan_helper Array.new, ""
   end
 
   private

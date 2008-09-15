@@ -32,6 +32,7 @@ class Scanner
     tokens = Array.new
 
     lines = string.split( /\n\n/ )
+    return tokens if lines.size == 0
     first_line = lines.shift
 
     # process first line for words and spaces
