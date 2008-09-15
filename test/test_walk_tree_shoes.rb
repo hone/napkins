@@ -35,6 +35,10 @@ class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
     test_tree_helper( "para( sub( \"subscript\" ) )", "\n\n~subscript~" )
   end
 
+  def test_walk_root_superscript
+    test_tree_helper( "para( sup( \"superscript\" ) )", "\n\n^superscript^" )
+  end
+
   private
   def test_tree_helper( expected, input )
     assert_equal expected, WalkTreeShoes.walk_root( Parser.parse( Scanner.scan( input ) ) )

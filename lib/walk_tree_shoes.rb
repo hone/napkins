@@ -36,6 +36,8 @@ class WalkTreeShoes
           components.push "ins( "
         elsif current_node.is_a? SubscriptNode
           components.push "sub( "
+        elsif current_node.is_a? SuperscriptNode
+          components.push "sup( "
         end
 
         # check if we need to recursively check the values
