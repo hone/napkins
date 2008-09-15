@@ -50,4 +50,14 @@ class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
 
     assert_equal "para( ins( \"underscore\" ) )", WalkTreeShoes.walk_root( root_node )
   end
+
+  def test_walk_root_subscript
+    root_node = Parser.parse( Scanner.scan( "\n\n~subscript~" ) )
+
+    assert_equal "para( sub( \"subscript\" ) )", WalkTreeShoes.walk_root( root_node )
+  end
+
+  def test_tree_helper( expected, input )
+    assert_equal expected, WalkTreeShoes.walk_root( Parser.parse( Scanner.scan( input ) ) )
+  end
 end
