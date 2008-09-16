@@ -203,15 +203,37 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     assert_equal root_node, Parser.process_stack( stack, true )
   end
 
-  def test_process_stack_header
-    root_node = RootNode.new(
-      HeaderNode.new( TextNode.new( "Header 1" ), 1 )
-    )
-    stack = Scanner.scan( "\n\nh1. Header 1" )
-    clean_stack( stack )
-    stack.unshift RootNode.new
+  def test_process_stack_headers
+    1.upto(6) do |level|
+      root_node = RootNode.new(
+        HeaderNode.new( TextNode.new( "Header #{level}" ), level )
+      )
+      stack = Scanner.scan( "\n\nh#{level}. Header #{level}" )
+      clean_stack( stack )
+      stack.unshift RootNode.new
 
-    assert_equal root_node, Parser.process_stack( stack, true )
+      assert_equal root_node, Parser.process_stack( stack, true )
+    end
+  end
+
+  def test_process_stack_header_next_node
+    1.upto( 6 ) do |level|
+      root_node = RootNode.new(
+        HeaderNode.new( TextNode.new( "Header 1" ), 1 )
+      )
+      root_node_result = RootNode.new(
+        HeaderNode.new(
+          TextNode.new( "Header 1" ),
+          1,
+          ParagraphNode.new( TextNode.new( "Paragraph!" ) )
+        )
+      )
+      stack = Scanner.scan( "\n\nParagraph!" )
+      clean_stack( stack )
+      stack.unshift root_node
+
+      assert_equal root_node_result, Parser.process_stack( stack, true )
+    end
   end
 
   private
