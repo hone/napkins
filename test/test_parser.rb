@@ -203,6 +203,17 @@ class TestParser < Test::Unit::TestCase # :nodoc:
     assert_equal root_node, Parser.process_stack( stack, true )
   end
 
+  def test_process_stack_header
+    root_node = RootNode.new(
+      HeaderNode.new( TextNode.new( "Header 1" ), 1 )
+    )
+    stack = Scanner.scan( "\n\nh1. Header 1" )
+    clean_stack( stack )
+    stack.unshift RootNode.new
+
+    assert_equal root_node, Parser.process_stack( stack, true )
+  end
+
   private
   def clean_stack( stack )
     stack.pop # EndLine 1 Token

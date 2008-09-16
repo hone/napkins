@@ -71,9 +71,9 @@ class Scanner
       header_string = line[0..3]
       header = HEADER[header_string]
       if header
-        tokens.push Header.new( header_string, position, position + 3 )
-        tokens.push Whitespace.new( ' ', position + 3, position + 4 )
+        tokens.push HeaderToken.new( header_string, position )
         position += 4
+        start_position = position
         line.slice!( 0, 4 )
       end
 

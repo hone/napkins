@@ -43,28 +43,17 @@ end
 class SuperscriptNode < Node
 end
 
-# is a Node in the Syntax Tree. Denotes header1.
-class Header1Node < Node
-end
-
-# is a Node in the Syntax Tree. Denotes header2.
-class Header2Node < Node
-end
-
-# is a Node in the Syntax Tree. Denotes header3.
-class Header3Node < Node
-end
-
-# is a Node in the Syntax Tree. Denotes header4.
-class Header4Node < Node
-end
-
-# is a Node in the Syntax Tree. Denotes header5.
-class Header5Node < Node
-end
-
-# is a Node in the Syntax Tree. Denotes header6.
-class Header6Node < Node
+# is a Node in the Syntax Tree. Denotes header.
+class HeaderNode < Node
+  # constructor. sets up the value pointed to by the Node and the TextNode in the instruction
+  # Inputs:
+  # [value] - the value that should be in the Header.  This is another Node.
+  # [level] - what level the HeaderNode is.  This should be a Fixnum from 1 to 6.
+  def initialize( value, level, next_node = nil )
+    @value = value
+    @level = level
+    @next_node = next_node
+  end
 end
 
 # is a Node in the Syntax Tree. Denotes a link.

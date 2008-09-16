@@ -95,7 +95,7 @@ class HeaderToken
 
   # Returns appropriate Syntax Node class
   def node_class
-    Object.const_get( "Header#{@level}Node" )
+    HeaderNode
   end
 end
 

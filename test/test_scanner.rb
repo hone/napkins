@@ -287,6 +287,19 @@ class TestScanner < Test::Unit::TestCase # :nodoc:
     test_scan_helper Array.new, ""
   end
 
+  def test_scan_header
+    expected_tokens = [
+      StartLineToken.new( 0 ),
+      EndLineToken.new( 0 ),
+      StartLineToken.new( 1 ),
+      HeaderToken.new( "h1. ", 0 ),
+      WordToken.new( "header1", 4 ),
+      EndLineToken.new( 1 )
+    ]
+
+    test_scan_helper expected_tokens, "\n\nh1. header1"
+  end
+
   private
   def test_scan_helper( expected_tokens, string )
     tokens = Scanner.scan string

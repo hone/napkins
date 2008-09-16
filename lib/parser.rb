@@ -107,8 +107,8 @@ class Parser
             last_node
           else
             # only make Paragraphs when ending lines
-            last_node = ParagraphNode.new( last_node ) if endline and last_node and counter == tokens.size
-            # need to attach at the end of the stack node (if ParagraphNode)
+            last_node = ParagraphNode.new( last_node ) if endline and last_node and counter == tokens.size and not last_node.is_a? HeaderNode
+            # need to attach at the end of the stack node (if ParagraphNode/HeaderNode)
             first_item = stack_item # need to keep this, to return beginning of node chain
             while stack_item.next_node
               stack_item = stack_item.next_node
@@ -138,9 +138,11 @@ class Parser
                   klass.new( stack_item.value, last_node )
                 end
               end
+            elsif klass == HeaderNode
+              klass.new( last_node, stack_item.level )
             else
               klass.new( last_node )
-            end # klass == TextNode
+            end # klass == TextNode/HeaderNode
 
           # if all tokens, check if at end and need to create a ParagraphnNode
           if counter == tokens.size and endline

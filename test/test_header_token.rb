@@ -20,8 +20,7 @@ class TestHeaderToken < Test::Unit::TestCase # :nodoc:
   def test_node_class
     (1..6).each do |level|
       token = HeaderToken.new( "h#{level}", 0 )
-      klass = Object.const_get( "Header#{level}Node" )
-      assert_equal klass, token.node_class
+      assert_equal HeaderNode, token.node_class
     end
   end
 end
