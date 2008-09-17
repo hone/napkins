@@ -1,5 +1,7 @@
 require 'test/unit'
 require 'lib/nodes'
+require 'lib/scanner'
+require 'lib/parser'
 require 'lib/walk_tree_shoes'
 
 class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
@@ -37,6 +39,34 @@ class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
 
   def test_walk_root_superscript
     testing_tree_helper( "para( sup( \"superscript\" ) )", "\n\n^superscript^" )
+  end
+
+  def test_walk_root_header1
+    testing_tree_helper( "banner( \"hello\" )", "\n\nh1. hello" )
+  end
+
+  def test_walk_root_header2
+    testing_tree_helper( "title( \"hello\" )", "\n\nh2. hello" )
+  end
+
+  def test_walk_root_header3
+    testing_tree_helper( "tagline( \"hello\" )", "\n\nh3. hello" )
+  end
+
+  def test_walk_root_header4
+    testing_tree_helper( "caption( \"hello\" )", "\n\nh4. hello" )
+  end
+
+  def test_walk_root_header5
+    testing_tree_helper( "para( \"hello\" )", "\n\nh5. hello" )
+  end
+
+  def test_walk_root_header6
+    testing_tree_helper( "inscription( \"hello\" )", "\n\nh6. hello" )
+  end
+
+  def test_walk_root_subsequent_header_paragraph_nodes
+    testing_tree_helper( "para( \"para1\" )\nbanner( \"banner1\" )\npara( \"para2\" )", "\n\npara1\n\nh1. banner1\n\npara2" )
   end
 
   private

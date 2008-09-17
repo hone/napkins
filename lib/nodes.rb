@@ -45,6 +45,8 @@ end
 
 # is a Node in the Syntax Tree. Denotes header.
 class HeaderNode < Node
+  attr_reader :level
+
   # constructor. sets up the value pointed to by the Node and the TextNode in the instruction
   # Inputs:
   # [value] - the value that should be in the Header.  This is another Node.

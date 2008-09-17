@@ -25,9 +25,29 @@ class WalkTreeShoes
         if current_node.is_a? TextNode
           components.push "\"#{current_node.value}\""
         elsif current_node.is_a? ParagraphNode
-          # only insert new lines for subsequent ParagraphNodes
-          components.push "\n" if last_node.is_a? ParagraphNode
+          # only insert new lines for subsequent ParagraphNodes/HeaderNodes
+          components.push "\n" if check_for_first_line( last_node )
           components.push "para( "
+        elsif current_node.is_a? HeaderNode
+          # only insert new lines for subsequent ParagraphNodes/HeaderNodes
+          components.push "\n" if check_for_first_line( last_node )
+
+          case current_node.level
+          when 1
+            components.push "banner( "
+          when 2
+            components.push "title( "
+          when 3
+            components.push "tagline( "
+          when 4
+            components.push "caption( "
+          when 5
+            components.push "para( "
+          when 6
+            components.push "inscription( "
+          else
+            raise "Error: #{level} is not supported, must be from 1 to 6."
+          end
         elsif current_node.is_a? BoldNode
           components.push "strong( "
         elsif current_node.is_a? ItalicsNode
@@ -47,7 +67,7 @@ class WalkTreeShoes
             components.push " )"
           end
         end
-        components.push ", " unless current_node.is_a? ParagraphNode
+        components.push ", " unless check_for_first_line( current_node )
         # should only put spaces in between TagNodes
         if current_node.is_a? TagNode and current_node.next_node.is_a? TagNode
           components.push '" ", '
@@ -58,7 +78,12 @@ class WalkTreeShoes
       end
 
       # need to remove the last ", " since it should only be in between nodes
-      components.pop unless last_node.is_a? ParagraphNode
+      components.pop unless check_for_first_line( last_node )
+    end
+
+    # check if should be prepending a newline
+    def check_for_first_line( last_node )
+      last_node.is_a? ParagraphNode or last_node.is_a? HeaderNode
     end
 
   end
