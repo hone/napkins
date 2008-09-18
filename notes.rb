@@ -18,6 +18,8 @@ class Notes < Shoes
   # first note to be displayed.  Setup interface then display the first note.
   def index
     self.clear
+    background white
+
     id = Note.find( :first ).id
 
     # setup the interface
@@ -44,6 +46,7 @@ class Notes < Shoes
       eval( eval_string )
     end
     @buttons_flow.clear do
+      background gray
       button( "edit" ) {edit id }
     end
 
@@ -59,6 +62,7 @@ class Notes < Shoes
       @edit_box = edit_box :width => 1.0, :height => HEIGHT - BUTTON_HEIGHT , :text => note.body
     end
     @buttons_flow.clear do
+      background gray
       button( "save" ) {update id }
     end
 
