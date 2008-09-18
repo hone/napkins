@@ -6,10 +6,8 @@ require 'lib/walk_tree_shoes'
 
 # the main note window
 class Notes < Shoes
-  WIDTH = 400
-  HEIGHT = 300
-  DISPLAY_WIDTH = 400
-  DISPLAY_HEIGHT = 250
+  WIDTH = 450
+  HEIGHT = 600
   BUTTON_HEIGHT = 30
 
   url '/', :index
@@ -19,14 +17,12 @@ class Notes < Shoes
 
   # first note to be displayed.  Setup interface then display the first note.
   def index
+    self.clear
     id = Note.find( :first ).id
 
     # setup the interface
-    @text_stack = stack :width => 1.0, :height => HEIGHT - BUTTON_HEIGHT do
-    end
-    @buttons_stack = stack :width => 1.0, :height => BUTTON_HEIGHT do
-    end
-
+    @buttons_flow = flow :width => 1.0, :height => BUTTON_HEIGHT
+    @text_stack = stack :width => 1.0
     show id
   end
   
@@ -46,9 +42,8 @@ class Notes < Shoes
       eval_string = WalkTreeShoes.walk_root( root_node )
       puts eval_string
       eval( eval_string )
-      #para note.body
     end
-    @buttons_stack.clear do
+    @buttons_flow.clear do
       button( "edit" ) {edit id }
     end
 
@@ -61,9 +56,9 @@ class Notes < Shoes
   def edit( id )
     note = Note.find id
     @text_stack.clear do
-      @edit_box = edit_box :width => 400, :height => HEIGHT - BUTTON_HEIGHT , :text => note.body
+      @edit_box = edit_box :width => 1.0, :height => HEIGHT - BUTTON_HEIGHT , :text => note.body
     end
-    @buttons_stack.clear do
+    @buttons_flow.clear do
       button( "save" ) {update id }
     end
 
