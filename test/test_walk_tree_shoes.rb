@@ -50,15 +50,15 @@ class TestWalkTreeShoes < Test::Unit::TestCase # :nodoc:
   end
 
   def test_walk_root_header3
-    testing_tree_helper( "tagline( \"hello\" )", "\n\nh3. hello" )
+    testing_tree_helper( "subtitle( \"hello\" )", "\n\nh3. hello" )
   end
 
   def test_walk_root_header4
-    testing_tree_helper( "caption( \"hello\" )", "\n\nh4. hello" )
+    testing_tree_helper( "tagline( \"hello\" )", "\n\nh4. hello" )
   end
 
   def test_walk_root_header5
-    testing_tree_helper( "para( \"hello\" )", "\n\nh5. hello" )
+    testing_tree_helper( "caption( \"hello\" )", "\n\nh5. hello" )
   end
 
   def test_walk_root_header6

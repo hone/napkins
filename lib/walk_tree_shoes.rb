@@ -38,11 +38,11 @@ class WalkTreeShoes
           when 2
             components.push "title( "
           when 3
-            components.push "tagline( "
+            components.push "subtitle( "
           when 4
-            components.push "caption( "
+            components.push "tagline( "
           when 5
-            components.push "para( "
+            components.push "caption( "
           when 6
             components.push "inscription( "
           else
